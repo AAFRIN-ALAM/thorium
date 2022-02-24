@@ -1,102 +1,54 @@
 const express = require("express");
 const router = express.Router();
-const players = [
+
+let persons = [
   {
-    name: "Aafrin",
-    dob: "07/05/2001",
-    gender: "female",
-    city: "Ghaziabad",
-    sports: ["Badminton"],
-    bookings: [
-      {
-        bookingNumber: 1,
-        sportId: "",
-        centerId: "",
-        type: "private",
-        slot: "1234567890",
-        bookedOn: "31/08/2021",
-        bookedFor: "01/09/2021",
-      },
-      {
-        bookingNumber: 2,
-        sportId: "",
-        centerId: "",
-        type: "private",
-        slot: "12345678901",
-        bookedOn: "31/08/2001",
-        bookedFor: "01/09/2001",
-      },
-    ],
+      name: "Anjlai",
+      age: 10,
+      votingStatus: false
   },
   {
-    name: "Ayush",
-    dob: "01/02/1999",
-    gender: "male",
-    city: "delhi",
-    sports: ["soccer"],
-    bookings: [],
+      name: "Priti",
+      age: 20,
+      votingStatus: false
   },
   {
-    name: "Sana",
-    dob: "07/07/2002",
-    gender: "female",
-    city: "mumbai",
-    sports: [""],
-    bookings: [],
+      name: "Ayush",
+      age: 70,
+      votingStatus: false
   },
-];
-
-
-//first problem Solution.........
-
-router.post("/players/:name/:dob/:gender/:city/:sports/:bookings", function (req, res) {
-    let newPlayer = {};
-    newPlayer.name = req.params.name;
-    newPlayer.dob = req.params.dob;
-    newPlayer.gender = req.params.gender;
-    newPlayer.city = req.params.city;
-    newPlayer.sports = [req.params.sports];
-    newPlayer.bookings = [req.params.bookings];
-    for (let i = 0; i < players.length; i++) {
-      if (players[i].name === newPlayer.name) {
-        res.send("name already exist");
-      }
-    }
-    players.push(newPlayer);
-    console.log(newPlayer);
-    res.send(players);
+  {
+      name: "Subham",
+      age: 25,
+      votingStatus: false
+  },
+  {
+      name: "Himashu",
+      age: 30,
+      votingStatus: false
   }
-);
+]
 
-//Second problem solution.......
+router.post("/voting-post", function (req, res) {
+  let votingAge = req.query.votingAge
 
-router.post("/players/:playerName/bookings/:bookingId", function (req, res) {
-  let userName = req.params.playerName;
-  let userBookingId = req.params.bookingId;
-  let userBookings = req.body;
+  let newArray=[];
+  for (let i = 0; i < persons.length; i++) {
 
-  for (let i = 0; i < players.length; i++) {
-    if (players[i].name == userName) {
-      let arr = players[i].bookings;
-      if (arr.length === 0) {
-        arr.push(userBookings);
-        res.send(players);
-      } else {
-        for (let j = 0; j < arr.length; j++) {
-          if (arr[j].bookingNumber == userBookingId) {
-            res.send("booking ID already exist");
-           break;
-          }
-          else if(j ===arr.length-1){
-            arr.push(userBookings);
-            res.send(players);
-          }
-        }
-        
+      if (persons[i].age > votingAge) {
+      
+          persons[i].votingStatus = true
+          newArray.push(persons[i])
       }
-    }
   }
-  res.send("name does not exist");
-});
+if (newArray.length>0)
+{
+  return res.send(newArray)
+}
+else{
+  return res.send("no member found above this age")
+}
+
+})
 
 module.exports = router;
