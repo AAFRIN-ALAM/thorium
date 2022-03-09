@@ -1,20 +1,20 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController= require("../controllers/userController")
+const userController = require("../controllers/userController");
+const tokenValidate = require("../middleWare/auth");
+//const UserValidate = require("../middleWare/UserValidator");
+const authorization = require("../middleWare/auth");
 
-router.get("/test-me", function (req, res) {
-    res.send("My first ever api!")
-})
+router.post("/createUser", userController.createUser);
 
-router.post("/users", userController.createUser)
+router.post("/loginUser", userController.loginUser);
 
-router.post("/login", userController.loginUser)
+router.get("/getUserData/:userId",tokenValidate.validation,authorization.authorization,userController.getUserData);
 
-//The userId is sent by front end
-router.get("/users/:userId", userController.getUserData)
-router.post("/users/:userId/posts", userController.postMessage)
+router.put("/updateUser/:userId",tokenValidate.validation,authorization.authorization,userController.updateUser);
 
-router.put("/users/:userId", userController.updateUser)
-router.delete('/users/:userId', userController.deleteUser)
+router.delete("/deleteUser/:userId",tokenValidate.validation,authorization.authorization,userController.deleteData);
+
+router.post("/users/:userId/posts",tokenValidate.validation,authorization.authorization, userController.createPost)
 
 module.exports = router;
