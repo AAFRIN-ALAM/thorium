@@ -5,6 +5,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 const authentication = async function(req,res,next){
     try{
         let token = req.headers["x-api-key"]
+        if(!token) return res.status(400).send({status:false, msg:"token must be present"})
         let decodedToken = jwt.verify(token, "secret-key", {ignoreExpiration: true})
         let exp = decodedToken.exp
         let iatNow = Math.floor(Date.now() / 1000)
@@ -17,7 +18,8 @@ const authentication = async function(req,res,next){
 
 
 const authorisation = async function(req,res,next){
-    try{let bookId = req.params.bookId;
+    try{
+    let bookId = req.params.bookId;
     if(!bookId) return res.status(400).send({status:false,msg:"bookId is not present in the params"})
     if(!ObjectId.isValid(bookId)) return res.status(401).send({status:false,msg:"BookId is not valid"})
     let book = await bookModel.findById(bookId)

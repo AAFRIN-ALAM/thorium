@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const reviewSchema = new mongoose.Schema({
     bookId : {type: ObjectId,required : true,ref: 'books',trim:true},
-    reviewedBy : {type:String,default:'Guest',trim:true},
+    reviewedBy : {type:String,default:'Guest',required:true,trim:true},
     reviewedAt : {type:String,default : moment().format('YYYY-MM-DD'),trim:true},
     rating : {type:Number,trim:true},
     review:{type:String,trim:true
